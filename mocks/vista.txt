@@ -1,0 +1,114 @@
+
+
+
+
+
+
+//Pesquisa  
+-tipo
+-nome
+-marca
+
+chats id:
+64db82e9dac797327865d525,
+64db87c9dac797327865d537,
+64db87b6dac797327865d536
+,64db8798dac797327865d535
+,
+
+
+
+
+mockData:
+
+
+[
+  {
+    "content": "Hello there!",
+    "creator": "64db8158dac797327865d516",
+    "chat_id": "64db82e9dac797327865d525"
+  },
+  {
+    "content": "How's it going?",
+    "creator": "64db8253dac797327865d517",
+    "chat_id": "64db87c9dac797327865d537"
+  },
+  {
+    "content": "Just checking in!",
+    "creator": "64db8270dac797327865d51c",
+    "chat_id": "64db87b6dac797327865d536"
+  },
+  {
+    "content": "Hope you're well!",
+    "creator": "64db8158dac797327865d516",
+    "chat_id": "64db8798dac797327865d535"
+  },
+  {
+    "content": "Any plans for the weekend?",
+    "creator": "64db8253dac797327865d517",
+    "chat_id": "64db82e9dac797327865d525"
+  },
+  {
+    "content": "Busy day ahead!",
+    "creator": "64db8158dac797327865d516",
+    "chat_id": "64db87c9dac797327865d537"
+  },
+  {
+    "content": "Let's catch up soon.",
+    "creator": "64db8270dac797327865d51c",
+    "chat_id": "64db87b6dac797327865d536"
+  },
+  {
+    "content": "What's new?",
+    "creator": "64db8253dac797327865d517",
+    "chat_id": "64db8798dac797327865d535"
+  },
+  {
+    "content": "Wishing you a great day!",
+    "creator": "64db8270dac797327865d51c",
+    "chat_id": "64db82e9dac797327865d525"
+  },
+  {
+    "content": "Hello again!",
+    "creator": "64db8158dac797327865d516",
+    "chat_id": "64db87c9dac797327865d537"
+  }
+]
+
+
+
+//Tipos de productos
+-Touch
+-Protector
+-Bateria
+-Face
+-Lcd
+-Cabo
+-Auricular
+
+tampa de iphone 7
+= tipo = tampa nome=iphone7
+
+
+Telas
+
+Telas de visualizacoes
+
+- Ver stoque 
+
+{
+    view: view quant,last entry,tipo,nome
+    functions: exportar pdf,extra button(++view option)
+}
+
+- Ver produtos registados
+
+{
+    view: view nome,tipo
+    functions: add prod,exportar pdf,deletar
+}
+
+
+registar prod
+registar compra
+- 
