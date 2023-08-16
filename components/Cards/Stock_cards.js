@@ -6,11 +6,13 @@ import { normalize } from "../geral";
 
 
 
-export function ChatContent_card({ nome, isMe }) {
+export function ChatContent_card({ nome, isMe, sent_time }) {
 
     if (isMe == null) {
         isMe = false;
     }
+
+
 
     return (
 
@@ -48,7 +50,7 @@ export function ChatContent_card({ nome, isMe }) {
 
             {/**Data */}
             <View style={[{ justifyContent: 'flex-end' }]}>
-                <Text style={estilos.letra_Normal}>  Data </Text>
+                <Text style={estilos.letra_Normal}>  {sent_time} </Text>
             </View>
         </View>
     );

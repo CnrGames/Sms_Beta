@@ -1,25 +1,23 @@
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { View, Text, StatusBar, FlatList, TouchableOpacity, TextInput, Image } from "react-native";
 import { normalize } from "../components/geral";
 import { estilos } from "../components/style/Pgeral";
 
 
+import { getGlobal_Dt } from "../mocks/NormalData/globalData";
 import { ChatContent_card } from "../components/Cards/Stock_cards";
 
 import * as mocks from '../mocks/Dummy_data/m_prods';
-
-
+import axios from "axios";
+import * as utils from "../mocks/NormalData/tool";
 //Telas teste
 
-let tamanhos = ["registo", "produto", "estatistica", "relatorio"];
-let validator = [true, null, true, false];
 
 //console.log(peds);
 
 
 
-let colunas = ["Nome", "Tipo", "quantidade"];
 //inputes
 
 
@@ -31,11 +29,95 @@ export default function T_Stock_view({ navigation }) {
     const [valor, setVal] = useState('');
     const [focado, setfocado] = useState('');
 
+
+    const { getChat, getMe, cli } = getGlobal_Dt();
     //Stock View tela
 
 
 
     const inptRef = useRef(null);
+
+
+    const [userDataA, setUDataA] = useState([]);
+    const [userDataB, setUDataB] = useState([]);
+    const [sortedChat, setStChat] = useState([]);
+
+
+    async function fetchData() {
+        try {
+            const resp = await axios.get('https://3h4jk54e3l.execute-api.eu-central-1.amazonaws.com/sms/many/' + getMe);
+            //console.log(res.data.data[0].PK);
+
+
+            const MessagesA = resp.data.data.filter((el) => {
+                return (el.chat_id == getChat);
+            })
+
+
+            console.log("A:-->" + MessagesA.length);
+            console.log(`He:${cli}//me:${getMe} `);
+
+
+
+            const respB = await axios.get('https://3h4jk54e3l.execute-api.eu-central-1.amazonaws.com/sms/many/' + cli);
+
+            let supletnB = [];
+
+            if (cli == "" || cli == getMe) {
+                supletnB = [];
+            } else {
+                supletnB = respB.data.data.filter((el) => {
+                    console.log(el.chat_id);
+                    return (el.chat_id == getChat);
+                });
+            }
+            const MessagesB = supletnB;
+
+
+            console.log("Aqui:::" + MessagesB.length);
+
+
+            const allMessages = [...MessagesA, ...MessagesB];
+
+
+            allMessages.sort(
+
+                (a, b) => {
+                    return (utils.getDataString(a.EntityIndexSK) - utils.getDataString(b.EntityIndexSK));
+                });
+
+
+            setStChat(allMessages);
+            await (console.log("finalizado!"));
+            //console.log(sortedChat);
+
+        } catch (err) {
+            console.log(err)
+        };
+    }
+
+    const postData = async () => {
+        try {
+            const response = await axios.post('https://3h4jk54e3l.execute-api.eu-central-1.amazonaws.com/sms', {
+                creator_name: getMe,
+                content: valor,
+                chat_id: getChat
+            });
+
+        } catch (error) {
+            console.error('Error posting data:', error);
+        }
+    };
+
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+        fetchData();
+    }, [valor]);
+
 
 
     function submitData() {
@@ -87,7 +169,7 @@ export default function T_Stock_view({ navigation }) {
 
                     style={{ flex: 1, zIndex: 1, marginTop: 14 }}>
 
-                    <FlatList data={mocks.listaC}
+                    <FlatList data={sortedChat}
                         ItemSeparatorComponent={() => {
 
                             return (
@@ -97,9 +179,14 @@ export default function T_Stock_view({ navigation }) {
 
                         }}
                         renderItem={({ item, index }) => {
-                            return (<ChatContent_card isMe={validator[1]} nome={item} />)
+                            let isMine = false;
+                            if (item.creator_name == getMe) {
+                                isMine = true;
+                            }
+                            return (<ChatContent_card isMe={isMine} nome={item.content} sent_time={utils.formatTime(utils.getDataString(item.EntityIndexSK))} />)
                         }
                         }
+
                     />
 
 
@@ -162,10 +249,13 @@ export default function T_Stock_view({ navigation }) {
                     <TouchableOpacity style={[estilos.bola, {
                         backgroundColor: 'cyan', width: 40,
                         justifyContent: 'center', height: normalize(25), marginLeft: 10
-                    }]} onPress={() => { submitData() }} >
+                    }]} onPress={() => {
+                        postData();
+                        submitData();
+                    }} >
                         <Text style={[estilos.letra_Normal, {
                             paddingHorizontal: 2
-                        }]}>X</Text>
+                        }]}>Ok</Text>
                     </TouchableOpacity>
                 </View>
 

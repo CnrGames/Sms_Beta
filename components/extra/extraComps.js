@@ -6,7 +6,7 @@ import { normalize } from "../geral"
 import { getGlobal_Dt } from "../../mocks/NormalData/globalData"
 
 export const ChatList_Ui = ({ DataList, navigation }) => {
-    const { setar } = getGlobal_Dt();
+    const { setCli, setChat, getMe } = getGlobal_Dt();
     return (
         <View style={{
             borderTopLeftRadius: 20, borderTopRightRadius: 20,
@@ -33,22 +33,36 @@ export const ChatList_Ui = ({ DataList, navigation }) => {
                 }}
                 contentContainerStyle={{ paddingTop: normalize(0) }}
                 renderItem={({ item, index }) => {
+                    let nomes = "";
+                    if (item.users[0] == getMe) {
+                        nomes = item.users[1];
+                    } else {
+                        nomes = item.users[0];
+
+                    }
                     return (
                         <TouchableOpacity
                             onPress={
                                 () => {
 
 
-                                    console.log("Ray: " + index);
-                                    setar(item.users[0]);
+                                    let guest = item.users.filter((el) => {
+                                        return (el != getMe);
+                                    });
+                                    setCli(guest);
+                                    setChat(item.id);
+                                    console.log(item.id + ":Id");
                                     navigation.navigate("Stock_V");
 
 
                                 }
                             }>
 
-                            <ChatUsers_card nome={item.users[0]} last_content={item.last_msg}
-                                count={item.count} />
+                            <ChatUsers_card
+                                nome={nomes}
+                                last_content={item.last}
+                            // count={item.count}
+                            />
                         </TouchableOpacity>
                     )
                 }}

@@ -9,6 +9,7 @@ import { estilos } from "../style/Pgeral";
 
 import T_Stock_view from "../../Telas/T_Stock_view";
 import Dashboard from "../../Telas/Dashboard";
+import { useEffect } from "react";
 
 const Stack = createStackNavigator();
 const CustomHeader = ({ title }) => {
@@ -21,10 +22,11 @@ const CustomHeader = ({ title }) => {
 
 
 const Routes = () => {
-    const { cli, setar } = getGlobal_Dt();
+    const { cli, setMe, getMe } = getGlobal_Dt();
 
-
-
+    useEffect(() => {
+        setMe("Akira");
+    }, []);
 
     return (
         <NavigationContainer>

@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, { useState, useRef, useContext } from 'react';
+import React, { useState, useRef, useContext, useEffect } from 'react';
 import {
     Text, View, StyleSheet, StatusBar, Dimensions, SafeAreaView,
     KeyboardAvoidingView, TouchableOpacity, FlatList, Modal, Pressable,
@@ -29,15 +29,44 @@ let control_nr = [25, 4, 1];
 //Mock Datas
 
 import { mockChatData, mockMessages, mockUsers } from '../mocks/entities';
-import { GlobalContext } from '../mocks/NormalData/globalData';
+import { getGlobal_Dt } from '../mocks/NormalData/globalData';
 
+
+//Axios
+
+import axios from 'axios';
+
+//Respone
 
 
 export default function Dashboard({ navigation }) {
 
 
 
-    const { cli } = useContext(GlobalContext);
+    const { cli, setCli, setChat, getMe } = getGlobal_Dt();
+
+    const [respData, setRespData] = useState([]);
+    async function getData() {
+        try {
+
+            const resp = await axios.get('http://10.0.2.2:3000/user/' + getMe);
+
+            const ChatRooms = resp.data;
+            setRespData(ChatRooms);
+
+
+
+        } catch (err) {
+            console.log(err)
+        };
+    }
+
+
+    useEffect(() => {
+        getData();
+        console.log("aqui");
+        //console.log(respData.length);
+    }, [getMe]);
 
 
     console.log(cli);
@@ -62,7 +91,7 @@ export default function Dashboard({ navigation }) {
                 <View style={estilos.jnl_funcs}>
 
 
-                    <ChatList_Ui DataList={mockChatData} navigation={navigation} />
+                    <ChatList_Ui DataList={respData} navigation={navigation} />
 
                 </View>
 
